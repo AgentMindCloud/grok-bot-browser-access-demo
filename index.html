@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grok Bot browser access — draft simulation</title>
+  <style>
+    :root {
+      --ink: #1b1714;
+      --muted: #5c534c;
+      --paper: #f3efe6;
+      --card: #fffaf3;
+      --line: #e2d8cb;
+      --fail: #8f1d1d;
+      --fail-bg: #f8e4df;
+      --ok: #1f6b45;
+      --accent: #9a3412;
+      --grok: #121212;
+      --grok-panel: #1c1c1c;
+      --grok-text: #f5f1ea;
+      --grok-dim: #b7aea4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1200px 400px at 10% -10%, #efe2d2 0%, transparent 55%),
+        var(--paper);
+      color: var(--ink);
+      font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+      line-height: 1.5;
+    }
+    a { color: var(--accent); }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px 64px; }
+    .stamp {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: stretch;
+      border: 1px solid #e7b2a8;
+      background: var(--fail-bg);
+      border-radius: 18px;
+      padding: 18px 20px;
+    }
+    .grade {
+      min-width: 148px;
+      border: 2px solid var(--fail);
+      color: var(--fail);
+      border-radius: 12px;
+      padding: 10px 14px;
+      text-align: center;
+      background: #fff;
+    }
+    .grade b {
+      display: block;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+    }
+    .grade strong {
+      display: block;
+      font-size: 42px;
+      line-height: 1;
+      margin-top: 4px;
+    }
+    .stamp p { margin: 0; }
+    .stamp .kicker {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fail);
+      font-weight: 700;
+    }
+    h1 { font-size: clamp(32px, 5vw, 52px); line-height: 1.05; margin: 22px 0 8px; }
+    .lede { font-size: 1.15rem; max-width: 68ch; margin-top: 0; }
+    .layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: start;
+    }
+    article, .phone {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+    }
+    h2 { margin: 0 0 8px; font-size: 1.55rem; }
+    .eyebrow {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+    h3 { margin: 22px 0 8px; font-size: 1.15rem; }
+    ul { padding-left: 1.15rem; }
+    li { margin: 6px 0; }
+    .note {
+      background: #f7f1e6;
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--ink);
+    }
+    .phone {
+      background: var(--grok);
+      color: var(--grok-text);
+      padding: 14px;
+    }
+    .chrome {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 8px 14px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 13px;
+      color: var(--grok-dim);
+    }
+    .dots { display: flex; gap: 6px; }
+    .dots i {
+      width: 10px; height: 10px; border-radius: 50%; display: block; background: #3a3a3a;
+    }
+    .switch {
+      display: flex;
+      background: #2a2a2a;
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .switch button {
+      border: 0;
+      background: transparent;
+      color: var(--grok-dim);
+      font: inherit;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .switch button[aria-pressed="true"] {
+      background: #f3efe6;
+      color: var(--ink);
+    }
+    .screen {
+      background: var(--grok-panel);
+      border-radius: 14px;
+      padding: 18px;
+      min-height: 420px;
+    }
+    .screen h2 { font-size: 1.7rem; }
+    .screen a { color: #f0c9a0; }
+    .screen[hidden] { display: none; }
+    .tag {
+      display: inline-block;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      border: 1px solid #4a4038;
+      border-radius: 999px;
+      padding: 3px 8px;
+      color: #f0c9a0;
+    }
+    .live-quote {
+      margin-top: 22px;
+      border-top: 1px dashed var(--line);
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.86em;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .grade strong { font-size: 34px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="stamp" data-live-grade="FAIL">
+      <div class="grade">
+        <b>Live grade</b>
+        <strong>FAIL</strong>
+      </div>
+      <div>
+        <p class="kicker">LIVE GRADE: FAIL</p>
+        <p><strong>draft simulation, does not clear the fail</strong></p>
+        <p>Checked 8 Oct 2026 from public pages. This page is the unpublished answer. grok.com and the help center are unchanged.</p>
+      </div>
+    </header>
+
+    <h1>Can I use Grok Bot from a browser without installing the app?</h1>
+    <p class="lede">No. The draft says that in the FAQ and again inside the Grok web app, for a Cursor plan and for SuperGrok, with the phone app as the way in that leaves this computer alone.</p>
+
+    <div class="layout">
+      <article id="browser-access">
+        <p class="eyebrow">Draft FAQ · same answer as the web app</p>
+        <h2>Can I use Grok Bot from a browser without installing the app?</h2>
+        <p>No. There is no Grok Bot browser client today. grok.com is Grok chat, a different product, and it does not list your bots.</p>
+        <p>Grok Bot is included with Cursor Pro, Pro+, Ultra, and self-serve Teams, and with a linked SuperGrok, SuperGrok Plus, or SuperGrok Heavy subscription. A Cursor plan already covers it. Buying SuperGrok is not required.</p>
+
+        <h3>On a computer where you cannot install the app</h3>
+        <p>Use the Grok Bot app on your phone and sign in with the same Cursor account. That does not install anything on this computer. The phone app opens the same bots, conversations, routines, and cloud computer.</p>
+        <ul>
+          <li>iPhone and iPad: <a href="https://apps.apple.com/app/id6794501026">App Store</a></li>
+          <li>Android: <a href="https://play.google.com/store/apps/details?id=ai.x.grok.bot">Google Play</a></li>
+          <li>Setup: <a href="https://cursor.com/help/grok-bot/mobile">Grok Bot on mobile</a> and <a href="https://docs.x.ai/grok-bot/mobile">Grok Bot for Mobile</a></li>
+        </ul>
+        <p class="note">Updating, recovering, or resetting the bot computer is still desktop-only. Do that on a machine where the desktop app is already allowed. Messaging your bots from the phone does not require it.</p>
+      </article>
+
+      <div class="phone">
+        <div class="chrome">
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span>grok.com · draft empty state</span>
+          <div class="switch" role="group" aria-label="Plan shown in the simulation">
+            <button type="button" id="show-cursor" aria-pressed="true">Cursor plan</button>
+            <button type="button" id="show-grok" aria-pressed="false">SuperGrok</button>
+          </div>
+        </div>
+
+        <section class="screen" id="cursor-screen" data-scenario="cursor-plan" data-empty-list="false" data-buy-supergrok-only="false">
+          <p class="tag">Signed-in simulation · Cursor plan</p>
+          <h2>Your bots are not in this chat</h2>
+          <p>There is no Grok Bot browser client today. grok.com is Grok chat, a different product, and it does not list your bots.</p>
+          <p>Your Cursor plan already includes Grok Bot. Buying SuperGrok is not required.</p>
+          <p><strong>Next step.</strong> Use the Grok Bot app on your phone and sign in with the same Cursor account. That does not install anything on this computer.</p>
+          <p><a href="#browser-access">Read the browser-access answer</a></p>
+        </section>
+
+        <section class="screen" id="grok-screen" data-scenario="supergrok" data-empty-list="false" data-buy-cursor-only="false" hidden>
+          <p class="tag">Signed-in simulation · SuperGrok</p>
+          <h2>Your bots are not in this chat</h2>
+          <p>There is no Grok Bot browser client today. grok.com is Grok chat, a different product, and it does not list your bots.</p>
+          <p>Your linked SuperGrok plan already includes Grok Bot. Buying a separate Cursor plan is not required for access you already have.</p>
+          <p><strong>Next step.</strong> Use the Grok Bot app on your phone and sign in with the same Cursor account. That does not install anything on this computer.</p>
+          <p><a href="#browser-access">Read the browser-access answer</a></p>
+        </section>
+      </div>
+    </div>
+
+    <p class="live-quote">Live unsigned screen at <code>https://grok.com/?product=grok-bot</code> on 8 Oct 2026, HTTP 200: “What should we explore?” with Sign in and Sign up. No bot list and no next step. The panels above are the draft, not that page.</p>
+  </div>
+  <script>
+    const cursorButton = document.getElementById("show-cursor");
+    const grokButton = document.getElementById("show-grok");
+    const cursorScreen = document.getElementById("cursor-screen");
+    const grokScreen = document.getElementById("grok-screen");
+
+    function show(which) {
+      const cursor = which === "cursor";
+      cursorScreen.hidden = !cursor;
+      grokScreen.hidden = cursor;
+      cursorButton.setAttribute("aria-pressed", cursor ? "true" : "false");
+      grokButton.setAttribute("aria-pressed", cursor ? "false" : "true");
+    }
+
+    cursorButton.addEventListener("click", function () { show("cursor"); });
+    grokButton.addEventListener("click", function () { show("grok"); });
+  </script>
+</body>
+</html>

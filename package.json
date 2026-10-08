@@ -1,0 +1,8 @@
+{
+  "name": "grok-bot-browser-access-draft",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "node scripts/verify-simulation.mjs"
+  }
+}
