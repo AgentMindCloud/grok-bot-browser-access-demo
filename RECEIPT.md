@@ -112,7 +112,7 @@ Page description on grok.com: “Grok is an AI assistant built by SpaceXAI. Chat
 
 ### Forum staff
 
-[forum.cursor.com/t/still-cant-get-into-grok-bot-on-computer-or-app/169184](https://forum.cursor.com/t/still-cant-get-into-grok-bot-on-computer-or-app/169184), staff post by @mohitjain:
+[forum.cursor.com/t/still-cant-get-into-grok-bot-on-computer-or-app/169184](https://forum.cursor.com/t/still-cant-get-into-grok-bot-on-computer-or-app/169184), staff post:
 
 > The computer that runs your Grok Bot on our side had gotten into a stuck state, which is why the app (and the web client) couldn’t get past the setup screen.
 
@@ -127,7 +127,7 @@ Sign-in help mentions [x.ai/bot](https://x.ai/bot) as a desktop auth retry (“O
 - **Signed-in grok.com as a Cursor-plan user.** The instructions forbid signing in. Cases 3 and 4 stay UNVERIFIED. The unsigned screen is recorded above.
 - **Signed-in grok.com as a SuperGrok user.** Same reason.
 - **Whether an unlisted “web client” URL works.** Staff used the words “web client” and published no address. Guessing URLs or signing in was out of bounds.
-- **Replies on the X post** `https://x.com/ewillisseck/status/2108161655519482217`. The X API client on this host is forbidden (`client-not-enrolled`). Nothing was posted. The grade uses official pages, not replies.
+- **Replies on the source X post.** The X API client on this host is forbidden (`client-not-enrolled`). Nothing was posted. The grade uses official pages, not replies.
 - **Installing or opening the phone app.** Store and doc URLs were checked for HTTP 200 only.
 - **Bot sync, computer reset, usage meters, account linking, new-user signup, and desktop installers.** Out of scope, and they need an account.
 
